@@ -9,5 +9,6 @@ template<typename T>
 template<typename T>
   struct remove_const<T const>
 {
+  // Just ignore the const and return the type 
   using type = T;
 };
