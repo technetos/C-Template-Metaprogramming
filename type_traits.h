@@ -1,7 +1,7 @@
 #ifndef META_TYPE_TRAITS_H
 #define META_TYPE_TRAITS_H
 
-namespace META
+namespace meta
 {
   // Generic identity type function
   template<typename T>
