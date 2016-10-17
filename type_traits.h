@@ -25,7 +25,7 @@ namespace meta
 
   // Primary template for remove_volatile
   template<typename T>
-    struct remove_volatile<T> : type_is<T>
+    struct remove_volatile : type_is<T>
     {
     };
 
@@ -59,13 +59,13 @@ namespace meta
 
   // Partial specialization matching on an empty parameter pack
   template<typename T>
-    struct is_one_of<T> : false_type
+    struct is_one_of<T> : ::std::false_type
     {
     };
 
   // Partial specialization matching on T being the first element in the pack
   template<typename T, typename ...Ts>
-    struct is_one_of<T, T, Ts...> : true_type
+    struct is_one_of<T, T, Ts...> : ::std::true_type
     {
     };
 
@@ -74,6 +74,5 @@ namespace meta
     struct is_one_of<T, T0, Ts...> : is_one_of<T, Ts...>
     {
     };
-
 }
 #endif
