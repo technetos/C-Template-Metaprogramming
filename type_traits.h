@@ -74,5 +74,42 @@ namespace meta
     struct is_one_of<T, T0, Ts...> : is_one_of<T, Ts...>
     {
     };
+
+  namespace detail
+  {
+    // Primary template for index_of
+    template<size_t I, typename T, typename ...Ts>
+      struct index_of;
+
+    // Partial specialization matching on T not being in the pack at all, this results
+    // in a SFINAE compatible substitution failure
+    template<size_t I, typename T>
+      struct index_of<I, T>
+      {
+      };
+
+    // Partial specialization matching on T being the first element in the pack
+    template<size_t I, typename T, typename ...Ts>
+      struct index_of<I, T, T, Ts...>
+      {
+        static constexpr size_t value = I;
+      };
+
+
+    // Partial specialization matching on T not being the head of the pack
+    template<size_t I, typename T, typename T0, typename ...Ts>
+      struct index_of<I, T, T0, Ts...> : index_of<I + 1, T, Ts...>
+      {
+      };
+  }
+
+  // Convenience wrapper around index_of
+  template<typename T, typename ...Ts>
+    struct index_of : detail::index_of<0, T, Ts...>
+    {
+    };
+
+
+  
 }
 #endif
