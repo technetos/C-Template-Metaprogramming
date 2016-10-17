@@ -33,5 +33,17 @@ namespace META
     struct remove_volatile<T volatile> : type_is<T>
     {
     };
+
+  // Primary template for IF
+  template<bool, typename T, typename>
+    struct IF : type_is<T>
+    {
+    };
+
+  // Partial specalization for matching on false
+  template<typename T, typename F>
+    struct IF<false, T, F> : type_is<F>
+    {
+    };
 }
 #endif
