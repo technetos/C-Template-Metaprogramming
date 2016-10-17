@@ -1,6 +1,6 @@
-#ifndef META_TYPE_TRAITS_H
-#define META_TYPE_TRAITS_H
-#include<type_traits>
+#ifndef META_TYPE_FUNCTIONS_H
+#define META_TYPE_FUNCTIONS_H
+#include<type_traits> // std::true_type, std::false_type
 
 namespace meta
 {
@@ -91,8 +91,8 @@ namespace meta
     template<size_t N, typename T, typename ...Ts>
       struct index_of;
 
-    // Partial specialization matching on T not being in the pack at all, this results
-    // in a SFINAE compatible substitution failure
+    // Partial specialization matching on T not being in the pack at all, this
+    // results in a SFINAE compatible substitution failure
     template<size_t N, typename T>
       struct index_of<N, T>
       {
@@ -105,7 +105,6 @@ namespace meta
         static constexpr size_t value = N;
       };
 
-
     // Partial specialization matching on T not being the head of the pack
     template<size_t N, typename T, typename T0, typename ...Ts>
       struct index_of<N, T, T0, Ts...> : index_of<N + 1, T, Ts...>
@@ -117,9 +116,6 @@ namespace meta
   template<typename T, typename ...Ts>
     struct index_of : detail::index_of<0, T, Ts...>
     {
-    };
-
-
-  
+    }; 
 }
 #endif
