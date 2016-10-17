@@ -11,6 +11,8 @@ namespace meta
       using type = T;
     };
 
+// ---------------------------------------------------------------------------
+
   // Primary template for remove_const
   template<typename T>
     struct remove_const : type_is<T>
@@ -23,6 +25,8 @@ namespace meta
     {
     };
 
+// ---------------------------------------------------------------------------
+
   // Primary template for remove_volatile
   template<typename T>
     struct remove_volatile : type_is<T>
@@ -34,6 +38,8 @@ namespace meta
     struct remove_volatile<T volatile> : type_is<T>
     {
     };
+
+// ---------------------------------------------------------------------------
 
   // Primary template for IF
   //
@@ -52,6 +58,8 @@ namespace meta
     struct IF<false, T, F> : type_is<F>
     {
     };
+  
+// ---------------------------------------------------------------------------
 
   // Primary template for is_one_of
   template<typename T, typename ...Ts>
@@ -75,30 +83,32 @@ namespace meta
     {
     };
 
+// ---------------------------------------------------------------------------
+
   namespace detail
   {
     // Primary template for index_of
-    template<size_t I, typename T, typename ...Ts>
+    template<size_t N, typename T, typename ...Ts>
       struct index_of;
 
     // Partial specialization matching on T not being in the pack at all, this results
     // in a SFINAE compatible substitution failure
-    template<size_t I, typename T>
-      struct index_of<I, T>
+    template<size_t N, typename T>
+      struct index_of<N, T>
       {
       };
 
-    // Partial specialization matching on T being the first element in the pack
-    template<size_t I, typename T, typename ...Ts>
-      struct index_of<I, T, T, Ts...>
+    // Partial specialization matching on T being the Nth element in the pack
+    template<size_t N, typename T, typename ...Ts>
+      struct index_of<N, T, T, Ts...>
       {
-        static constexpr size_t value = I;
+        static constexpr size_t value = N;
       };
 
 
     // Partial specialization matching on T not being the head of the pack
-    template<size_t I, typename T, typename T0, typename ...Ts>
-      struct index_of<I, T, T0, Ts...> : index_of<I + 1, T, Ts...>
+    template<size_t N, typename T, typename T0, typename ...Ts>
+      struct index_of<N, T, T0, Ts...> : index_of<N + 1, T, Ts...>
       {
       };
   }
