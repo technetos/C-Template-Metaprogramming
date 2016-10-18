@@ -142,7 +142,7 @@ namespace meta
     using head = type_at<0, Ts...>;
 
   template<typename ...Ts>
-    using tail = type_at<(sizeof...(Ts)) - 1 , Ts...>;
+    using tail = type_at<(sizeof...(Ts)) - 1, Ts...>;
   
 // ---------------------------------------------------------------------------
 
