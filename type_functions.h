@@ -120,6 +120,24 @@ namespace meta
 
 // ---------------------------------------------------------------------------
 
+  // Primary template for type_at
+  template<size_t N, typename ...Ts>
+    struct type_at;
+
+  // Partial specialization matching on N != 0
+  template<size_t N, typename T, typename ...Ts>
+    struct type_at<N, T, Ts...> : type_at<N-1, Ts...>
+    {
+    };
+
+  // Partial specialization matching on N = 0
+  template<typename T, typename ...Ts>
+    struct type_at<0, T, Ts...> : type_is<T>
+    {
+    };
+
+// ---------------------------------------------------------------------------
+
   template<typename ...Ts>
     using void_t = void;
 
