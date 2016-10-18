@@ -133,16 +133,5 @@ namespace meta
     {
     };
 
-// DOES NOT WORK WITH VALUES...yet
-
-  template<typename T, typename = void>
-    struct has_value_member : ::std::false_type
-    {
-    };
-
-  template<typename T>
-    struct has_value_member<T, void_t<T::value>> : ::std::true_type
-    {
-    };
 }
 #endif
