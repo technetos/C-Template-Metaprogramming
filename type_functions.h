@@ -117,5 +117,32 @@ namespace meta
     struct index_of : detail::index_of<0, T, Ts...>
     {
     }; 
+
+// ---------------------------------------------------------------------------
+
+  template<typename ...Ts>
+    using void_t = void;
+
+  template<typename T, typename = void>
+    struct has_type_member : ::std::false_type
+    {
+    };
+
+  template<typename T>
+    struct has_type_member<T, void_t<typename T::type>> : ::std::true_type
+    {
+    };
+
+// DOES NOT WORK WITH VALUES...yet
+
+  template<typename T, typename = void>
+    struct has_value_member : ::std::false_type
+    {
+    };
+
+  template<typename T>
+    struct has_value_member<T, void_t<T::value>> : ::std::true_type
+    {
+    };
 }
 #endif
