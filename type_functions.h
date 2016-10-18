@@ -139,6 +139,14 @@ namespace meta
 // ---------------------------------------------------------------------------
 
   template<typename ...Ts>
+    using head = type_at<0, Ts...>;
+
+  template<typename ...Ts>
+    using tail = type_at<(sizeof...(Ts)) - 1 , Ts...>;
+  
+// ---------------------------------------------------------------------------
+
+  template<typename ...Ts>
     using void_t = void;
 
   template<typename T, typename = void>
@@ -150,6 +158,8 @@ namespace meta
     struct has_type_member<T, void_t<typename T::type>> : ::std::true_type
     {
     };
+
+// ---------------------------------------------------------------------------
 
 }
 #endif
