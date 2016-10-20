@@ -8,7 +8,6 @@ namespace meta { namespace type_traits {
   template<typename ...Ts>
     using void_t = void;
 
-
   // Primary template for has_type_member, SFINAE defaults to this one
   // in the event of the specialization case failing and being removed
   // from the overload set
