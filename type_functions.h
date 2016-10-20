@@ -1,15 +1,26 @@
-#ifndef META_TYPE_FUNCTIONS_H
-#define META_TYPE_FUNCTIONS_H
+#ifndef META_TYPE_FUNC_H
+#define META_TYPE_FUNC_H
 
 #include<type_traits> // std::true_type, std::false_type
 
-namespace meta { namespace type_functions {
+namespace meta { namespace type_func {
 
-  // Generic identity type function
   template<typename T>
     struct type_is
     {
       using type = T;
+    };
+
+  template<template<typename> class Tt, typename T>
+    struct type_is<Tt<T>>
+    {
+      using type = Tt<T>;
+    };
+
+  template<template<typename, typename ...> class Tt, typename T, typename ...Ts>
+    struct type_is<Tt<T, Ts...>>
+    {
+      using type = Tt<T, Ts...>;
     };
 
 // ---------------------------------------------------------------------------
@@ -147,6 +158,59 @@ namespace meta { namespace type_functions {
   
 // ---------------------------------------------------------------------------
 
+  template<typename T>
+    struct inner_type : type_is<T>
+    {
+    };
+
+  template<template<typename> class Tt, typename T>
+    struct inner_type<Tt<T>> : type_is<T>
+    {
+    };
+
+  template<template<typename, typename ...> class Tt, typename T, typename ...Ts>
+    struct inner_type<Tt<T, Ts...>> : type_is<T>
+    {
+    };
+
+// ---------------------------------------------------------------------------
+
+  template<typename T, typename>
+    struct rebind : type_is<T>
+    {
+    };
+
+  template<template<typename> class Tt, typename T, typename U>
+    struct rebind<Tt<T>, U> : type_is<Tt<U>>
+    {
+    };
+
+  template<template<typename ...> class Tt, typename T, typename U, typename ...Ts>
+    struct rebind<Tt<T, Ts...>, U> : type_is<Tt<U, Ts...>>
+    {
+    };
+
+// ---------------------------------------------------------------------------
+
+  template<typename ...Ts>
+    using void_t = void;
+
+  // Primary template for has_type_member, SFINAE defaults to this one
+  // in the event of the specialization case failing and being removed
+  // from the overload set
+  template<typename T, typename = void>
+    struct has_type_member : ::std::false_type
+    {
+    };
+
+  // Partial specialization on has_type_member matching on a successful
+  // substitution of void_t<typename T::type> resolving to void
+  template<typename T>
+    struct has_type_member<T, void_t<typename T::type>> : ::std::true_type
+    {
+    };
+
 }}
 
 #endif
+
