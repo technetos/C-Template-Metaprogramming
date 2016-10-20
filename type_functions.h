@@ -1,9 +1,10 @@
 #ifndef META_TYPE_FUNCTIONS_H
 #define META_TYPE_FUNCTIONS_H
+
 #include<type_traits> // std::true_type, std::false_type
 
-namespace meta
-{
+namespace meta { namespace type_functions {
+
   // Generic identity type function
   template<typename T>
     struct type_is
@@ -146,20 +147,6 @@ namespace meta
   
 // ---------------------------------------------------------------------------
 
-  template<typename ...Ts>
-    using void_t = void;
+}}
 
-  template<typename T, typename = void>
-    struct has_type_member : ::std::false_type
-    {
-    };
-
-  template<typename T>
-    struct has_type_member<T, void_t<typename T::type>> : ::std::true_type
-    {
-    };
-
-// ---------------------------------------------------------------------------
-
-}
 #endif
