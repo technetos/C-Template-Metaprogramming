@@ -150,9 +150,11 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
+  // Grab the first parameter in a parameter pack
   template<typename ...Ts>
     using head = type_at<0, Ts...>;
 
+  // Grab the last parameter in a parameter pack
   template<typename ...Ts>
     using tail = type_at<(sizeof...(Ts)) - 1, Ts...>;
   
