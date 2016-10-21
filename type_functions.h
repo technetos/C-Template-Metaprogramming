@@ -73,6 +73,9 @@ namespace meta { namespace type_func {
   
 // ---------------------------------------------------------------------------
 
+
+  // Determine if a given type exists within a given parameter pack
+
   // Primary template for is_one_of
   template<typename T, typename ...Ts>
     struct is_one_of;
@@ -96,6 +99,8 @@ namespace meta { namespace type_func {
     };
 
 // ---------------------------------------------------------------------------
+
+  // Get the index of a given type within a given parameter pack
 
   namespace detail
   {
@@ -131,6 +136,8 @@ namespace meta { namespace type_func {
     }; 
 
 // ---------------------------------------------------------------------------
+
+  // Get the type at a given index in a given parameter pack
 
   // Primary template for type_at
   template<size_t N, typename ...Ts>
@@ -227,4 +234,3 @@ namespace meta { namespace type_func {
 }}
 
 #endif
-
