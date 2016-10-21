@@ -158,6 +158,7 @@ namespace meta { namespace type_func {
   
 // ---------------------------------------------------------------------------
 
+  // Access the inner-most type parameter of a given template
   template<typename T>
     struct inner_type : type_is<T>
     {
@@ -175,16 +176,27 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
+  // Re-Parameterize the left-most type with a new type
+
+  // meta::type_func::rebind<int>::type t;
+  //
+  // t would be of type int
   template<typename T, typename>
     struct rebind : type_is<T>
     {
     };
 
+  // meta::type_func::rebind<std::list<int>, std::string>::type t
+  //
+  // t would be of type std::list<std::string>
   template<template<typename> class Tt, typename T, typename U>
     struct rebind<Tt<T>, U> : type_is<Tt<U>>
     {
     };
 
+  // meta::type_func::rebind<std::pair<int, int>, std::string>::type t
+  //
+  // t would be of type std::pair<std::string, int>
   template<template<typename ...> class Tt, typename T, typename U, typename ...Ts>
     struct rebind<Tt<T, Ts...>, U> : type_is<Tt<U, Ts...>>
     {
