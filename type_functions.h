@@ -70,7 +70,7 @@ namespace meta { namespace type_func {
     struct IF<false, T, F> : type_is<F>
     {
     };
-  
+
 // ---------------------------------------------------------------------------
 
 
@@ -97,6 +97,10 @@ namespace meta { namespace type_func {
     struct is_one_of<T, T0, Ts...> : is_one_of<T, Ts...>
     {
     };
+/*
+  template<typename ...Ts>
+    using is_one_of_t = typename is_one_of<typename head<Ts...>::type, Ts...>::type;
+*/
 
 // ---------------------------------------------------------------------------
 
@@ -153,13 +157,23 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
-  // Grab the first parameter in a parameter pack
-  template<typename ...Ts>
-    using head = type_at<0, Ts...>;
+  namespace detail
+  {
 
-  // Grab the last parameter in a parameter pack
+    // Grab the first parameter in a parameter pack
+    template<typename ...Ts>
+      using head = type_at<0, Ts...>;
+
+    // Grab the last parameter in a parameter pack
+    template<typename ...Ts>
+      using tail = type_at<(sizeof...(Ts)) - 1, Ts...>;
+  }
+
   template<typename ...Ts>
-    using tail = type_at<(sizeof...(Ts)) - 1, Ts...>;
+    using head_t = typename detail::head<Ts...>::type;
+
+  template<typename ...Ts>
+    using tail_t = typename detail::tail<Ts...>::type;
   
 // ---------------------------------------------------------------------------
 
