@@ -162,18 +162,18 @@ namespace meta { namespace type_func {
 
     // Grab the first parameter in a parameter pack
     template<typename ...Ts>
-      using head = type_at<0, Ts...>;
+      using first = type_at<0, Ts...>;
 
     // Grab the last parameter in a parameter pack
     template<typename ...Ts>
-      using tail = type_at<(sizeof...(Ts)) - 1, Ts...>;
+      using last = type_at<(sizeof...(Ts)) - 1, Ts...>;
   }
 
   template<typename ...Ts>
-    using head_t = typename detail::head<Ts...>::type;
+    using first_t = typename detail::first<Ts...>::type;
 
   template<typename ...Ts>
-    using tail_t = typename detail::tail<Ts...>::type;
+    using last_t = typename detail::last<Ts...>::type;
   
 // ---------------------------------------------------------------------------
 
