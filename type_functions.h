@@ -139,13 +139,9 @@ namespace meta { namespace type_func {
 
   // Get the type at a given index in a given parameter pack
 
-  // Primary template for type_at
-  template<size_t N, typename ...Ts>
-    struct type_at;
-
-  // Partial specialization matching on N != 0
+  // Primaty template for type_at
   template<size_t N, typename T, typename ...Ts>
-    struct type_at<N, T, Ts...> : type_at<N-1, Ts...>
+    struct type_at : type_at<N-1, Ts...>
     {
     };
 
