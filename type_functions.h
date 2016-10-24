@@ -133,6 +133,8 @@ namespace meta { namespace type_func {
       };
   }
 
+  // using meta::type_func::rebind_t;
+  // rebind_t<std::pair<int, int>, std::string> t;
   template<typename ...Ts>
     using rebind_t = typename detail::rebind<Ts...>::type;
 
