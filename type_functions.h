@@ -78,9 +78,10 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
+  // Access the left inner-most type parameter of a given template
+  
   namespace detail
   {
-    // Access the left inner-most type parameter of a given template
     template<typename T>
       struct inner_type : type_is<T>
       {
@@ -106,7 +107,6 @@ namespace meta { namespace type_func {
 
   namespace detail
   {
-
     // using meta::type_func::rebind;
     // rebind<int, std::string>::type t;
     // t would be of type int
