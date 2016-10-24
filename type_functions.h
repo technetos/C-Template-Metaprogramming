@@ -196,8 +196,8 @@ namespace meta { namespace type_func {
     {
     };
 
+*/
 // ---------------------------------------------------------------------------
-
   // Primary template for IF
   //
   // IF<true, T, F>::type t
@@ -217,7 +217,7 @@ namespace meta { namespace type_func {
     };
 
 // ---------------------------------------------------------------------------
-*/
+
   // Get the index of a given type within a given parameter pack
 
   namespace detail
