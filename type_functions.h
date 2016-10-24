@@ -11,13 +11,13 @@ namespace meta { namespace type_func {
       using type = T;
     };
 
-  template<template<typename> class Tt, typename T>
+  template<template<typename> typename Tt, typename T>
     struct type_is<Tt<T>>
     {
       using type = Tt<T>;
     };
 
-  template<template<typename, typename ...> class Tt, typename T, typename ...Ts>
+  template<template<typename, typename ...> typename Tt, typename T, typename ...Ts>
     struct type_is<Tt<T, Ts...>>
     {
       using type = Tt<T, Ts...>;
@@ -26,7 +26,6 @@ namespace meta { namespace type_func {
 // ---------------------------------------------------------------------------
 
   // Get the type at a given index in a given parameter pack
-
 
   namespace detail
   {
@@ -41,22 +40,15 @@ namespace meta { namespace type_func {
       struct type_at<0, T, Ts...> : type_is<T>
       {
       };
-
-    // Grab the first parameter in a parameter pack
-    template<typename ...Ts>
-      using first = type_at<0, Ts...>;
-
-    // Grab the last parameter in a parameter pack
-    template<typename ...Ts>
-      using last = type_at<(sizeof...(Ts)) - 1, Ts...>;
   }
 
+  // Grab the first parameter in a parameter pack
   template<typename ...Ts>
-    using first_t = typename detail::first<Ts...>::type;
+    using first_t = typename detail::type_at<0, Ts...>::type;
 
+  // Grab the last parameter in a parameter pack
   template<typename ...Ts>
-    using last_t = typename detail::last<Ts...>::type;
-
+    using last_t = typename detail::type_at<(sizeof...(Ts)) - 1, Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
@@ -86,21 +78,27 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
-  // Access the inner-most type parameter of a given template
-  template<typename T>
-    struct inner_type : type_is<T>
-    {
-    };
+  namespace detail
+  {
+    // Access the left inner-most type parameter of a given template
+    template<typename T>
+      struct inner_type : type_is<T>
+      {
+      };
 
-  template<template<typename> class Tt, typename T>
-    struct inner_type<Tt<T>> : type_is<T>
-    {
-    };
+    template<template<typename> typename Tt, typename T>
+      struct inner_type<Tt<T>> : type_is<T>
+      {
+      };
 
-  template<template<typename, typename ...> class Tt, typename T, typename ...Ts>
-    struct inner_type<Tt<T, Ts...>> : type_is<T>
-    {
-    };
+    template<template<typename, typename ...> typename Tt, typename T, typename ...Ts>
+      struct inner_type<Tt<T, Ts...>> : type_is<T>
+      {
+      };
+  }
+
+  template<typename ...Ts>
+    using inner_t = typename detail::inner_type<Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
@@ -111,7 +109,6 @@ namespace meta { namespace type_func {
 
     // using meta::type_func::rebind;
     // rebind<int, std::string>::type t;
-    //
     // t would be of type int
     template<typename T, typename>
       struct rebind : type_is<T>
@@ -121,7 +118,7 @@ namespace meta { namespace type_func {
     // using meta::type_func::rebind; 
     // rebind<std::list<std::string>, int>::type t;
     // t would be of type std::list<int>
-    template<template<typename> class Tt, typename T, typename U>
+    template<template<typename> typename Tt, typename T, typename U>
       struct rebind<Tt<T>, U> : type_is<Tt<U>>
       {
       };
@@ -130,20 +127,14 @@ namespace meta { namespace type_func {
     // using meta::type_func::rebind; 
     // rebind<std::pair<int, int>, std::string>::type t;
     // t would be of type std::pair<std::string, int>
-    template<template<typename ...> class Tt, typename T, typename U, typename ...Ts>
+    template<template<typename ...> typename Tt, typename T, typename U, typename ...Ts>
       struct rebind<Tt<T, Ts...>, U> : type_is<Tt<U, Ts...>>
       {
       };
   }
 
-  template<typename T, U>
-    using rebind_t = typename ::detail::rebind<T, U>::type;
-
-  template<template<typename> typename Tt, typename T, typename U>
-    using rebind_t = typename ::detail::rebind<Tt<T>, U>::type;
-
-  template<typename<typename, typename ...> typename Tt, typename T, typename U, typename ...Ts>
-    using rebind_t = typename ::detail::rebind<Tt<T, Ts...>, U>::type;
+  template<typename ...Ts>
+    using rebind_t = typename detail::rebind<Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
@@ -165,39 +156,8 @@ namespace meta { namespace type_func {
     {
     };
 
-  // THESE EXISTS IN STD DO I REALLT NEED THEM HERE?..PROBABLY NOT, expect these to vanish
-  // in a later commit
-/*
-// ---------------------------------------------------------------------------
-  
-  // Primary template for remove_const
-  template<typename T>
-    struct remove_const : type_is<T>
-    {
-    };
-
-  // Partial specialization for matching const types
-  template<typename T>
-    struct remove_const<T const> : type_is<T>
-    {
-    };
-
 // ---------------------------------------------------------------------------
 
-  // Primary template for remove_volatile
-  template<typename T>
-    struct remove_volatile : type_is<T>
-    {
-    };
-
-  // Partial specialization for matching volatile types
-  template<typename T>
-    struct remove_volatile<T volatile> : type_is<T>
-    {
-    };
-
-*/
-// ---------------------------------------------------------------------------
   // Primary template for IF
   //
   // IF<true, T, F>::type t
