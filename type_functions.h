@@ -165,6 +165,9 @@ namespace meta { namespace type_func {
     {
     };
 
+  // THESE EXISTS IN STD DO I REALLT NEED THEM HERE?..PROBABLY NOT, expect these to vanish
+  // in a later commit
+/*
 // ---------------------------------------------------------------------------
   
   // Primary template for remove_const
@@ -214,7 +217,7 @@ namespace meta { namespace type_func {
     };
 
 // ---------------------------------------------------------------------------
-
+*/
   // Get the index of a given type within a given parameter pack
 
   namespace detail
