@@ -17,7 +17,7 @@ namespace meta { namespace type_func {
       using type = Tt<T>;
     };
 
-  template<template<typename, typename ...> typename Tt, typename T, typename ...Ts>
+  template<template<typename ...> typename Tt, typename T, typename ...Ts>
     struct type_is<Tt<T, Ts...>>
     {
       using type = Tt<T, Ts...>;
@@ -92,7 +92,7 @@ namespace meta { namespace type_func {
       {
       };
 
-    template<template<typename, typename ...> typename Tt, typename T, typename ...Ts>
+    template<template<typename ...> typename Tt, typename T, typename ...Ts>
       struct inner_type<Tt<T, Ts...>> : type_is<T>
       {
       };
