@@ -1,8 +1,6 @@
 #ifndef META_TYPE_FUNC_H
 #define META_TYPE_FUNC_H
 
-#include<iostream>
-
 #include<type_traits> // std::true_type, std::false_type
 
 namespace meta { namespace type_func {
