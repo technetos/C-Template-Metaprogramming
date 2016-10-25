@@ -5,10 +5,6 @@
 
 namespace meta { namespace type_func {
 
-  template<typename ...Ts> struct tseq {};
-  
-// ---------------------------------------------------------------------------
-
   template<typename T>
     struct type_is
     {
@@ -29,11 +25,16 @@ namespace meta { namespace type_func {
 
 // ---------------------------------------------------------------------------
 
-  template<typename T, typename ...Ts>
-    struct prepend_tseq;
+  namespace detail
+  {
+    template<typename ...Ts> struct tseq {};
+    
+    template<typename T, typename ...Ts>
+      struct prepend_tseq;
 
-  template<typename T, typename ...Ts>
-    struct prepend_tseq<T, tseq<Ts...>> : type_is<tseq<T, Ts...>> {};
+    template<typename T, typename ...Ts>
+      struct prepend_tseq<T, tseq<Ts...>> : type_is<tseq<T, Ts...>> {};
+  }
 
 // ---------------------------------------------------------------------------
 
@@ -77,6 +78,26 @@ namespace meta { namespace type_func {
   // Partial specialization matching on T not being the head of the pack
   template<typename T, typename T0, typename ...Ts>
     struct is_one_of<T, T0, Ts...> : is_one_of<T, Ts...> {};
+
+// ---------------------------------------------------------------------------
+
+  namespace detail
+  {
+    template<template<typename> typename F, typename ...Ts>
+      struct map_ts;
+
+    template<template<typename> typename F>
+      struct map_ts<F> : type_is<tseq<>> {};
+
+    template<template<typename> typename F, typename T, typename ...Ts>
+      struct map_ts<F, T, Ts...> : prepend_tseq<typename F<T>::type, typename map_ts<F, Ts...>::type> {};
+
+    template<template<typename> typename F, typename ...Ts>
+      struct map_ts<F, tseq<Ts...>> : map_ts<F, Ts...> {};
+  }
+
+  template<template<typename> typename F, typename ...Ts>
+    using map_t = typename detail::map_ts<F,Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
@@ -142,26 +163,6 @@ namespace meta { namespace type_func {
   // substitution of void_t<typename T::type> resolving to void
   template<typename T>
     struct has_type_member<T, void_t<typename T::type>> : ::std::true_type {};
-
-// ---------------------------------------------------------------------------
-
-  namespace detail
-  {
-    template<template<typename> typename F, typename ...Ts>
-      struct map_ts;
-
-    template<template<typename> typename F>
-      struct map_ts<F> : type_is<tseq<>> {};
-
-    template<template<typename> typename F, typename T, typename ...Ts>
-      struct map_ts<F, T, Ts...> : prepend_tseq<typename F<T>::type, typename map_ts<F, Ts...>::type> {};
-
-    template<template<typename> typename F, typename ...Ts>
-      struct map_ts<F, tseq<Ts...>> : map_ts<F, Ts...> {};
-  }
-
-  template<template<typename> typename F, typename ...Ts>
-    using map_t = typename detail::map_ts<F,Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
