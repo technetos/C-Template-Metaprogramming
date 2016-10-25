@@ -1,9 +1,15 @@
 #ifndef META_TYPE_FUNC_H
 #define META_TYPE_FUNC_H
 
+#include<iostream>
+
 #include<type_traits> // std::true_type, std::false_type
 
 namespace meta { namespace type_func {
+
+  template<typename ...Ts> struct tseq {};
+  
+// ---------------------------------------------------------------------------
 
   template<typename T>
     struct type_is
@@ -21,6 +27,16 @@ namespace meta { namespace type_func {
     struct type_is<Tt<T, Ts...>>
     {
       using type = Tt<T, Ts...>;
+    };
+
+// ---------------------------------------------------------------------------
+
+  template<typename T, typename ...Ts>
+    struct prepend_tseq;
+
+  template<typename T, typename ...Ts>
+    struct prepend_tseq<T, tseq<Ts...>> : type_is<tseq<T, Ts...>>
+    {
     };
 
 // ---------------------------------------------------------------------------
@@ -79,7 +95,7 @@ namespace meta { namespace type_func {
 // ---------------------------------------------------------------------------
 
   // Access the left inner-most type parameter of a given template
-  
+ 
   namespace detail
   {
     template<typename T>
@@ -123,7 +139,6 @@ namespace meta { namespace type_func {
       {
       };
 
-
     // using meta::type_func::rebind; 
     // rebind<std::pair<int, int>, std::string>::type t;
     // t would be of type std::pair<std::string, int>
@@ -157,6 +172,32 @@ namespace meta { namespace type_func {
     struct has_type_member<T, void_t<typename T::type>> : ::std::true_type
     {
     };
+
+// ---------------------------------------------------------------------------
+
+  namespace detail
+  {
+    template<template<typename> typename F, typename ...Ts>
+      struct map_ts;
+
+    template<template<typename> typename F>
+      struct map_ts<F> : type_is<tseq<>>
+      {
+      };
+
+    template<template<typename> typename F, typename T, typename ...Ts>
+      struct map_ts<F, T, Ts...> : prepend_tseq<typename F<T>::type, typename map_ts<F, Ts...>::type>
+      {
+      };
+
+    template<template<typename> typename F, typename ...Ts>
+      struct map_ts<F, tseq<Ts...>> : map_ts<F, Ts...>
+      {
+      };
+  }
+
+  template<template<typename> typename F, typename ...Ts>
+    using map_t = typename detail::map_ts<F,Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
