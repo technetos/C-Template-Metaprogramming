@@ -11,17 +11,8 @@ namespace meta { namespace type_func {
       using type = T;
     };
 
-  template<template<typename> typename Tt, typename T>
-    struct type_is<Tt<T>>
-    {
-      using type = Tt<T>;
-    };
-
-  template<template<typename ...> typename Tt, typename T, typename ...Ts>
-    struct type_is<Tt<T, Ts...>>
-    {
-      using type = Tt<T, Ts...>;
-    };
+  template<typename ...Ts>
+    using id = typename type_is<Ts...>::type;
 
 // ---------------------------------------------------------------------------
 
