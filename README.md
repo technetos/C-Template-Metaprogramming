@@ -2,4 +2,4 @@
 
 # Meta
 
-A CPP template metaprogramming library
+Sort of my playgound for some template metaprogramming ideas
